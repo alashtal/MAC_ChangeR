@@ -27,11 +27,9 @@ def get_arguments():
 
 
 options = get_arguments()
-change_mac(options.interface, options.new_MAC)
-
-print(subprocess.call("ifconfig"))
-
-
+# change_mac(options.interface, options.new_MAC)
+ifconfig_result = subprocess.check_output(["ifconfig", options.interface])
+print(ifconfig_result)
 # Old code
 # interface = input("heyy")
 # subprocess.call("ifconfig " + interface + " down", shell=True)
