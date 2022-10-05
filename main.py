@@ -17,11 +17,11 @@ new_mac = options.new_MAC
 print("[+]Changing MAC address of " + interface + " to " + new_mac)
 
 subprocess.call(["ifconfig", interface, "down"])
-subprocess.call(["ifconfig", interface, "hw", "ether", new_mac ])
+subprocess.call(["ifconfig", interface, "hw", "ether", new_mac])
 subprocess.call(["ifconfig", interface, "up"])
 
-### Oldie but goldie
-#interface = input("heyy wassap")
+# Oldie but goldie
+# interface = input("heyy")
 # subprocess.call("ifconfig " + interface + " down", shell=True)
 # subprocess.call("ifconfig " + interface + " hw ether " + new_mac, shell=True)
 # subprocess.call("ifconfig " + interface + " up", shell=True)
