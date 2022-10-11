@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-
 import subprocess
 import optparse
+import re
 
 # -h or --help can help you see how to use the program
 
@@ -26,12 +26,24 @@ def get_arguments():
     return options
 
 
+def process_mac_result(interface):
+    ifconfig_result = subprocess.check_output(["ifconfig", interface])
+    regex_mac_results = re.search(r"\w\w:\w\w:\w\w:\w\w:\w\w:\w\w", ifconfig_result.decode('utf-8')) # another solution for py vs py 3 is str(ifconfig_result)
+    if regex_mac_results:
+        return regex_mac_results.group(0)
+    else:
+        print("[-] Could not read MAC address, Please check again.")
+
+
 options = get_arguments()
-# change_mac(options.interface, options.new_MAC)
-ifconfig_result = subprocess.check_output(["ifconfig", options.interface])
-print(ifconfig_result)
-# Old code
-# interface = input("heyy")
-# subprocess.call("ifconfig " + interface + " down", shell=True)
-# subprocess.call("ifconfig " + interface + " hw ether " + new_mac, shell=True)
-# subprocess.call("ifconfig " + interface + " up", shell=True)
+
+current_mac = process_mac_result(options.interface)
+# print("Current MAC = " + str(current_mac))
+
+change_mac(options.interface, options.new_MAC)
+current_mac = process_mac_result(options.interface)
+
+if current_mac == options.new_MAC:
+    print("[+] MAC address has successfully been changed to " + current_mac)
+else:
+    print("[-] Could not change the MAC address, Please try again.")
